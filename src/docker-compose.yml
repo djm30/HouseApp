@@ -1,0 +1,21 @@
+version: "3"
+services:
+  application:
+    build: .
+    command: python -u app.py
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    links:
+      - app_db
+  app_db:
+    container_name: app_db
+    image: mongo:3.6.1
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
