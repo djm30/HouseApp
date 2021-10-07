@@ -12,5 +12,10 @@ def hello(name=None):
     return render_template("index.html", name=name)
 
 
+@app.route('/test', methods=['GET'])
+def test():
+    return render_template("dash.html")
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host="0.0.0.0")
