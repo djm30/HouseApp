@@ -2,7 +2,7 @@ version: "3"
 services:
   application:
     build: .
-    command: python -u app.py
+    command: python -u run.py
     ports:
       - "8000:8000"
     volumes:
