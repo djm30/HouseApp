@@ -1,3 +1,4 @@
+from werkzeug.utils import redirect
 from app.database.models import User, Task, Post
 from app import app
 from flask import json, render_template, request, url_for, jsonify
@@ -10,22 +11,24 @@ def render_home():
 
 
 
+
 #TASK ROUTES
 
 #RETURNS JSON OF ALL TASKS
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
-    pass
+    return Task.objects().to_json()
 
 #RETURNS SINGLE TASK
 @app.route('/tasks/<id>', methods=['GET'])
 def get_task(id = None):
-    pass
+    return Task.objects.get(id=id)
 
 #ADDS NEW task
 @app.route("/tasks/add", methods=['POST'])
 def add_task():
-    pass
+    Task(task_name = request.get_json()["task_name"], currentUser = request.get_json()["current_user"]).save()
+    return redirect(url_for("render_home"))
 
 #UPDATE task
 @app.route("/tasks/update/<id>", methods=["PATCH"])
@@ -35,7 +38,10 @@ def update_task(id = None):
 #DELETE task
 @app.route("/tasks/delete/<id>", methods=["DELETE"])
 def delete_task(id = None):
-    pass
+    Task.objects.get(id = id).delete()
+    return redirect(url_for("render_home"))
+
+
 
 
 #POST ROUTES
@@ -43,17 +49,21 @@ def delete_task(id = None):
 #RETURNS JSON OF ALL POSTS
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    pass
+    return Post.objects.to_json()
 
 #RETURNS SINGLE POST
 @app.route('/posts/<id>', methods=['GET'])
 def get_post(id = None):
-    pass
+    return Post.objects.get(id=id)
 
 #ADDS NEW POST
 @app.route("/posts/add", methods=['POST'])
 def add_post():
-    pass
+    Post(
+        post_title = request.get_json()["post_name"], 
+        post_content = request.get_json()["post_content"], 
+        post_author = request.get_json()["post_author"]).save()
+    return redirect(url_for("render_home"))
 
 #UPDATE POST
 @app.route("/posts/update/<id>", methods=["PATCH"])
@@ -63,7 +73,8 @@ def update_post(id = None):
 #DELETE POST
 @app.route("/posts/delete/<id>", methods=["DELETE"])
 def delete_post(id = None):
-    pass
+    Post.objects.get(id = id).delete()
+    return redirect(url_for("render_home"))
 
 
 
@@ -97,30 +108,33 @@ def delete_debt(id = None):
 
 #USER ROUTES
 
-#RETURNS JSON OF ALL userS
+#RETURNS JSON OF ALL USERS
 @app.route('/users', methods=['GET'])
 def get_users():
-    pass
+    return User.objects.to_json()
 
-#RETURNS SINGLE DEBT
+#RETURNS SINGLE USER
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id = None):
-    pass
+    return User.objects.get(id=id).to_json()
 
-#ADDS NEW DEBT
+#ADDS NEW USER
 @app.route("/users/add", methods=['POST'])
 def add_user():
-    pass
+    User(name = request.get_json()["name"]).save()
+    return redirect(url_for("render_home"))
 
-#UPDATE DEBT
+
+#UPDATE USER
 @app.route("/users/update/<id>", methods=["PATCH"])
 def update_user(id = None):
     pass
 
-#DELETE DEBT
+#DELETE USER
 @app.route("/users/delete/<id>", methods=["DELETE"])
 def delete_user(id = None):
-    pass
+    User.objects.get(id = id).delete()
+    return redirect(url_for("render_home"))
 
 
 # @app.route('/mongotest')
