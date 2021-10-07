@@ -22,7 +22,7 @@ def get_tasks():
 #RETURNS SINGLE TASK
 @app.route('/tasks/<id>', methods=['GET'])
 def get_task(id = None):
-    return Task.objects.get(id=id)
+    return Task.objects.get(id=id).to_json()
 
 #ADDS NEW task
 @app.route("/tasks/add", methods=['POST'])
@@ -54,7 +54,7 @@ def get_posts():
 #RETURNS SINGLE POST
 @app.route('/posts/<id>', methods=['GET'])
 def get_post(id = None):
-    return Post.objects.get(id=id)
+    return Post.objects.get(id=id).to_json()
 
 #ADDS NEW POST
 @app.route("/posts/add", methods=['POST'])
