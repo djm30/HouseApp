@@ -1,5 +1,6 @@
 from werkzeug.utils import redirect
 from app.database.models import User, Task, Post
+from app.database.testdata import save_data
 from app import app
 from flask import json, render_template, request, url_for, jsonify
 from datetime import date
@@ -10,6 +11,12 @@ def render_home():
     return render_template("index.html")
 
 
+#SELF EXPLANATORY, ADDS TEST DATA TO DATABASE
+@app.route("/createtestdata")
+def create_data():
+    save_data()
+    return "DATA SAVED"
+
 
 
 #TASK ROUTES
@@ -17,12 +24,12 @@ def render_home():
 #RETURNS JSON OF ALL TASKS
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
-    return Task.objects().to_json()
+    return {"Tasks": Task.objects().to_json()}
 
 #RETURNS SINGLE TASK
 @app.route('/tasks/<id>', methods=['GET'])
 def get_task(id = None):
-    return Task.objects.get(id=id).to_json()
+    return {"Task" :Task.objects.get(id=id).to_json()}
 
 #ADDS NEW task
 @app.route("/tasks/add", methods=['POST'])
@@ -34,6 +41,12 @@ def add_task():
 @app.route("/tasks/update/<id>", methods=["PATCH"])
 def update_task(id = None):
     pass
+
+#UPDATE users associated with tasks
+@app.route("/tasks/update", methods=["POST"])
+def update_task_user():
+    # return request.get_json()
+    return "TASK RECIEVED"
 
 #DELETE task
 @app.route("/tasks/delete/<id>", methods=["DELETE"])
@@ -49,12 +62,12 @@ def delete_task(id = None):
 #RETURNS JSON OF ALL POSTS
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    return Post.objects.to_json()
+    return {"Posts" : Post.objects.to_json()}
 
 #RETURNS SINGLE POST
 @app.route('/posts/<id>', methods=['GET'])
 def get_post(id = None):
-    return Post.objects.get(id=id).to_json()
+    return {"Post" : Post.objects.get(id=id).to_json()}
 
 #ADDS NEW POST
 @app.route("/posts/add", methods=['POST'])
@@ -111,12 +124,12 @@ def delete_debt(id = None):
 #RETURNS JSON OF ALL USERS
 @app.route('/users', methods=['GET'])
 def get_users():
-    return User.objects.to_json()
+    return {"User" : User.objects.to_json()}
 
 #RETURNS SINGLE USER
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id = None):
-    return User.objects.get(id=id).to_json()
+    return {"User" : User.objects.get(id=id).to_json()}
 
 #ADDS NEW USER
 @app.route("/users/add", methods=['POST'])

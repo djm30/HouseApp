@@ -50,7 +50,14 @@ let confirmUpdate = function(button){
     hideCheckboxes()
 
     //Send data to flask i guess
-    return tasksToUpdate;
+    
+    axios.post("/tasks/update", tasksToUpdate)
+    .then((response) =>{
+        console.log("task post sent")
+    })
+    .catch((error) =>{
+        console.log(error)
+    })
 }
 
 let rotaButtonInfo = {
