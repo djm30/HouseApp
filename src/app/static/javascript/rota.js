@@ -53,7 +53,7 @@ let confirmUpdate = function(button){
     
     axios.post("/tasks/update", tasksToUpdate)
     .then((response) =>{
-        console.log("task post sent")
+        console.log(tasksToUpdate)
     })
     .catch((error) =>{
         console.log(error)

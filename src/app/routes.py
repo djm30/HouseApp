@@ -1,3 +1,4 @@
+from logging import error
 from werkzeug.utils import redirect
 from app.database.models import User, Task, Post
 from app.database.testdata import save_data
@@ -8,7 +9,7 @@ from datetime import date
 @app.route("/", methods=["GET"])
 @app.route('/home', methods=['GET'])
 def render_home():
-    return render_template("index.html")
+    return render_template("index.html", tasks = get_tasks()["Tasks"], users = get_users()["Users"])
 
 
 #SELF EXPLANATORY, ADDS TEST DATA TO DATABASE
@@ -18,18 +19,17 @@ def create_data():
     return "DATA SAVED"
 
 
-
 #TASK ROUTES
 
 #RETURNS JSON OF ALL TASKS
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
-    return {"Tasks": Task.objects().to_json()}
+    return {"Tasks": Task.objects}
 
 #RETURNS SINGLE TASK
 @app.route('/tasks/<id>', methods=['GET'])
 def get_task(id = None):
-    return {"Task" :Task.objects.get(id=id).to_json()}
+    return {"Task" :Task.objects.get(id=id)}
 
 #ADDS NEW task
 @app.route("/tasks/add", methods=['POST'])
@@ -45,8 +45,21 @@ def update_task(id = None):
 #UPDATE users associated with tasks
 @app.route("/tasks/update", methods=["POST"])
 def update_task_user():
-    # return request.get_json()
-    return "TASK RECIEVED"
+    max_length = len(User.objects.all())
+    data = request.get_json()["selected"]
+    try:
+        for task in data:
+            task_id, user_id  = tuple(task.split("_"))
+            user_id = int(user_id)
+            if user_id+1 > max_length:
+                user_id = 1
+            else: user_id+=1
+            task = Task.objects.get(id = task_id)
+            task.current_user = User.objects.get(_id = user_id)
+            task.save()
+        return "Info updated successfully!"
+    except error as e:
+        return "Error updating task"
 
 #DELETE task
 @app.route("/tasks/delete/<id>", methods=["DELETE"])
@@ -62,12 +75,12 @@ def delete_task(id = None):
 #RETURNS JSON OF ALL POSTS
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    return {"Posts" : Post.objects.to_json()}
+    return {"Posts" : Post.objects}
 
 #RETURNS SINGLE POST
 @app.route('/posts/<id>', methods=['GET'])
 def get_post(id = None):
-    return {"Post" : Post.objects.get(id=id).to_json()}
+    return {"Post" : Post.objects.get(id=id)}
 
 #ADDS NEW POST
 @app.route("/posts/add", methods=['POST'])
@@ -124,12 +137,12 @@ def delete_debt(id = None):
 #RETURNS JSON OF ALL USERS
 @app.route('/users', methods=['GET'])
 def get_users():
-    return {"User" : User.objects.to_json()}
+    return {"Users" : User.objects}
 
 #RETURNS SINGLE USER
 @app.route('/users/<id>', methods=['GET'])
 def get_user(id = None):
-    return {"User" : User.objects.get(id=id).to_json()}
+    return {"User" : User.objects.get(id=id)}
 
 #ADDS NEW USER
 @app.route("/users/add", methods=['POST'])

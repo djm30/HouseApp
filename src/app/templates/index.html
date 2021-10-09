@@ -64,25 +64,29 @@
           <div class="card" style="width: 18rem">
             <div class="card-header"><h3>Rotas</h3></div>
             <ul class="list-group list-group-flush">
+              {% for task in tasks%}
+              <!-- Single task item -->
               <li class="list-group-item">
                 <div class="row">
                   <div class="col-8">
-                    <h4>Item One</h4>
-                    <span>Sample Name</span>
+                    <h4>{{task.task_name}}</h4>
+                    <span>{{task.current_user.name}}</span>
                   </div>
                   <div class="col-4 align-self-center">
                     <span>
                       <input
                         class="form-check-input updateRotaCheckboxes"
                         type="checkbox"
-                        id="checkboxNoLabel1"
+                        id="{{task.id}}_{{task.current_user._id}}"
                         value=""
                         aria-label="..."
                     /></span>
                   </div>
                 </div>
               </li>
-              <!-- Single task item -->
+              {% endfor %}
+              <!-- End of single task item -->
+
               <li class="list-group-item">
                 <div class="row align-items-center text-center">
                   <div class="col">
@@ -94,7 +98,6 @@
                   </div>
                 </div>
               </li>
-              <!-- End of single task item -->
             </ul>
           </div>
         </div>

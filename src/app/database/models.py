@@ -2,7 +2,7 @@ import mongoengine as me
 from datetime import datetime
 
 class User(me.Document):
-    user_id = me.SequenceField(primary_key=True)
+    _id = me.SequenceField(primary_key=True)
     name = me.StringField(required=True, unique=True)
 
 class Task(me.Document):
