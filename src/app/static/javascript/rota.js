@@ -51,13 +51,20 @@ let confirmUpdate = function(button){
 
     //Send data to flask i guess
     
-    axios.post("/tasks/update", tasksToUpdate)
+    axios.patch("/tasks/update", tasksToUpdate)
     .then((response) =>{
         console.log(tasksToUpdate)
+        updateDiv()
+        hideCheckboxes()
     })
     .catch((error) =>{
         console.log(error)
     })
+}
+
+function updateDiv()
+{ 
+    $( "#post_container" ).load(window.location.href + " #post_container" );
 }
 
 let rotaButtonInfo = {
@@ -71,5 +78,6 @@ updateRotaBtn.addEventListener("click", function(event) {
     else{
         console.log(confirmUpdate(this))
     }
+    // $(" #post_container").load(" #post_container > *")
     rotaButtonInfo.updating = !rotaButtonInfo.updating
 })

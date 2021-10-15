@@ -43,7 +43,7 @@ def update_task(id = None):
     pass
 
 #UPDATE users associated with tasks
-@app.route("/tasks/update", methods=["POST"])
+@app.route("/tasks/update", methods=["PATCH"])
 def update_task_user():
     max_length = len(User.objects.all())
     data = request.get_json()["selected"]
