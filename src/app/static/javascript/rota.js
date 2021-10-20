@@ -1,17 +1,24 @@
 updateRotaBtn = document.querySelector("#updateRotaBtn")
 updateRotaCheckboxes = document.querySelectorAll(".updateRotaCheckboxes")
 
+
+
+let rotaButtonInfo = {
+    updating: false
+}
+
+
+
+
 let showCheckboxes = function(){
-    for(let check of updateRotaCheckboxes){
-        check.classList.remove("display-hide")
-        check.classList.add("display-show")
-    }
+    $( " .updateRotaCheckboxes" ).show()
+    $( " #taskModalBtn" ).hide()
 }
 
 let hideCheckboxes = function(){
+    $( " .updateRotaCheckboxes" ).hide()
+    $( " #taskModalBtn" ).show()
     for(let check of updateRotaCheckboxes){
-        check.classList.remove("display-show")
-        check.classList.add("display-hide")
         check.checked = false
     }
 }
@@ -26,15 +33,23 @@ let makeButtonBlue = function(){
     updateRotaBtn.classList.add("btn-primary")
 }
 
-hideCheckboxes()
-
 
 let updatePressed = function(button){
     button.innerHTML = "Confirm Update"
-    makeButtonGreen()
+    // showCheckboxes()
     showCheckboxes()
+    makeButtonGreen()
 
 }
+
+function updateDiv()
+{ 	
+    hideCheckboxes();
+}
+
+hideCheckboxes()
+
+
 
 let confirmUpdate = function(button){
     let tasksToUpdate = {
@@ -53,23 +68,18 @@ let confirmUpdate = function(button){
     
     axios.patch("/tasks/update", tasksToUpdate)
     .then((response) =>{
-        console.log(tasksToUpdate)
-        updateDiv()
-        hideCheckboxes()
+        console.log(tasksToUpdate) 
+        location.reload()
+
     })
     .catch((error) =>{
         console.log(error)
     })
+
 }
 
-function updateDiv()
-{ 
-    $( "#post_container" ).load(window.location.href + " #post_container" );
-}
 
-let rotaButtonInfo = {
-    updating: false
-}
+
 
 updateRotaBtn.addEventListener("click", function(event) {
     if(!rotaButtonInfo.updating) {
@@ -78,6 +88,33 @@ updateRotaBtn.addEventListener("click", function(event) {
     else{
         console.log(confirmUpdate(this))
     }
-    // $(" #post_container").load(" #post_container > *")
     rotaButtonInfo.updating = !rotaButtonInfo.updating
+})
+
+
+
+addTaskFormBtn = document.querySelector("#taskFormBtn")
+taskNameInput = document.querySelector("#taskNameInput")
+startingUserInput = document.querySelector("#startingUserInput")
+
+addTaskFormBtn.addEventListener("click", function(event) {
+    event.preventDefault()
+    console.log()
+    console.log(startingUserInput.value)
+
+    taskToAdd = {
+        task_name : taskNameInput.value,
+        current_user : parseInt(startingUserInput.value)
+    }
+    console.log(taskToAdd)
+    axios.post("/tasks/add", taskToAdd)
+    .then((response) =>{
+        console.log(response)
+        location.reload()
+
+    })
+    .catch((error) =>{
+        console.log(error)
+    })
+
 })

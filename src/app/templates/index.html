@@ -30,24 +30,7 @@
     <nav class="navbar navbar-light bg-secondary">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="2em"
-            height="2em"
-            fill="currentColor"
-            class="bi bi-house-fill d-inline-block"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"
-            />
-            <path
-              fill-rule="evenodd"
-              d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"
-            />
-          </svg>
-          <h1 class="display-1 d-inline-block">Dashboard</h1>
+          <h1 class="display-4 d-inline-block">Dashboard</h1>
         </a>
       </div>
     </nav>
@@ -67,34 +50,47 @@
         >
           <div class="card" style="width: 18rem">
             <div class="card-header"><h3>Rotas</h3></div>
-            <ul class="list-group list-group-flush">
-              {% for task in tasks%}
-              <!-- Single task item -->
-              <li class="list-group-item">
-                <div class="row">
-                  <div class="col-8">
-                    <h4>{{task.task_name}}</h4>
-                    <span>{{task.current_user.name}}</span>
-                  </div>
-                  <div class="col-4 align-self-center">
-                    <span>
-                      <input
-                        class="form-check-input updateRotaCheckboxes"
-                        type="checkbox"
-                        id="{{task.id}}_{{task.current_user._id}}"
-                        value=""
-                        aria-label="..."
-                    /></span>
-                  </div>
-                </div>
-              </li>
-              {% endfor %}
-              <!-- End of single task item -->
 
+            <div id="Tasks">
+              <ul class="list-group list-group-flush">
+                {% for task in tasks%}
+                <!-- Single task item -->
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-8">
+                      <h4>{{task.task_name}}</h4>
+                      <span>{{task.current_user.name}}</span>
+                    </div>
+                    <div class="col-4 align-self-center">
+                      <span>
+                        <input
+                          class="form-check-input updateRotaCheckboxes"
+                          type="checkbox"
+                          id="{{task.id}}_{{task.current_user._id}}"
+                          value=""
+                          aria-label="..."
+                      /></span>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <!-- End of single task item -->
+            <ul class="list-group list-group-flush">
               <li class="list-group-item">
                 <div class="row align-items-center text-center">
                   <div class="col">
                     <form action="#">
+                      <button
+                        id="taskModalBtn"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#taskModal"
+                      >
+                        Add Task
+                      </button>
                       <button id="updateRotaBtn" class="btn btn-primary">
                         Update
                       </button>
@@ -105,6 +101,7 @@
             </ul>
           </div>
         </div>
+
         <!-- --------------------------Posts----------------------- -->
         <div class="col-12 col-lg-6 order-1 order-lg-2 mb-3 mb-lg-auto">
           <div class="card bg-light">
@@ -142,6 +139,7 @@
             </div>
           </div>
         </div>
+
         <!-- --------------------------Debt----------------------- -->
         <div
           class="
@@ -179,6 +177,68 @@
                 </div>
               </li>
             </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div
+      class="modal fade"
+      id="taskModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Add task</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="POST" id="task_form">
+              <div class="form-group row mb-3">
+                <label for="taskName" class="col-sm-3 col-form-label"
+                  >Task Name</label
+                >
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="taskNameInput"
+                    placeholder="Task Name"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-3 col-form-label"
+                  >Starting User</label
+                >
+                <div class="col-sm-9">
+                  <select class="form-control" id="startingUserInput">
+                    <option value="1">Default select</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              form="task_form"
+              class="btn btn-primary"
+              id="taskFormBtn"
+            >
+              Add Task
+            </button>
           </div>
         </div>
       </div>
